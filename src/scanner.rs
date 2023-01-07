@@ -37,8 +37,8 @@ impl Scanner {
         Scanner {
             error_reporter,
             source,
-            tokens: Vec::new().into(),
-            keywords: keywords,
+            tokens: Vec::new(),
+            keywords,
             start: 0,
             current: 0,
             line: 1,
@@ -54,7 +54,7 @@ impl Scanner {
         self.tokens
             .push(Token::new(TokenType::Eof, "".into(), "".into(), self.line));
 
-        return &self.tokens;
+        &self.tokens
     }
 
     fn scan_token(&mut self) {
@@ -144,7 +144,7 @@ impl Scanner {
     }
 
     fn is_alpha(&self, c: char) -> bool {
-        return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c == '_';
+        ('a'..='z').contains(&c) || ('A'..='Z').contains(&c) || c == '_'
     }
 
     fn is_alpha_numeric(&self, c: char) -> bool {
@@ -215,7 +215,7 @@ impl Scanner {
     }
 
     fn is_digit(&self, c: char) -> bool {
-        c >= '0' && c <= '9'
+        ('0'..='9').contains(&c)
     }
 
     fn is_at_end(&self) -> bool {
