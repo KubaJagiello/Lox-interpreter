@@ -6,6 +6,7 @@ use std::io::Error;
 
 mod lox;
 mod scanner;
+mod error_reporter;
 
 fn main() -> Result<(), Error> {
     let args: Vec<String> = env::args().collect();

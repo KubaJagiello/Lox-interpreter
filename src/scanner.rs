@@ -1,7 +1,12 @@
+use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt;
+use std::rc::Rc;
+
+use crate::error_reporter::ErrorReporter;
 
 pub struct Scanner {
+    error_reporter: Rc<RefCell<ErrorReporter>>,
     source: String,
     tokens: Vec<Token>,
     keywords: HashMap<String, TokenType>,
@@ -11,7 +16,7 @@ pub struct Scanner {
 }
 
 impl Scanner {
-    pub fn new(source: String) -> Scanner {
+    pub fn new(source: String, error_reporter: Rc<RefCell<ErrorReporter>>) -> Scanner {
         let mut keywords: HashMap<String, TokenType> = HashMap::new();
         keywords.insert("and".into(), TokenType::And);
         keywords.insert("class".into(), TokenType::Class);
@@ -30,6 +35,7 @@ impl Scanner {
         keywords.insert("var".into(), TokenType::Var);
         keywords.insert("while".into(), TokenType::While);
         Scanner {
+            error_reporter,
             source,
             tokens: Vec::new().into(),
             keywords: keywords,
@@ -172,7 +178,9 @@ impl Scanner {
         }
 
         if self.is_at_end() {
-            //Lox::error(self.line, "Unterminated string.".into());
+            self.error_reporter
+                .borrow_mut()
+                .error(self.line, "Unterminated string.".into());
         }
 
         self.advance();
