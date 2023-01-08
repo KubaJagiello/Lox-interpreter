@@ -72,28 +72,32 @@ impl Scanner {
             ';' => self.add_token(TokenType::Semicolon),
             '*' => self.add_token(TokenType::Star),
             '!' => {
-                self.add_token(if self.match_token('=') {
+                let matched = self.match_token('=');
+                self.add_token(if matched {
                     TokenType::BangEqual
                 } else {
                     TokenType::Bang
                 });
             }
             '=' => {
-                self.add_token(if self.match_token('=') {
+                let matched = self.match_token('=');
+                self.add_token(if matched {
                     TokenType::EqualEqual
                 } else {
                     TokenType::Equal
                 });
             }
             '<' => {
-                self.add_token(if self.match_token('=') {
+                let matched = self.match_token('=');
+                self.add_token(if matched {
                     TokenType::LessEqual
                 } else {
                     TokenType::Less
                 });
             }
             '>' => {
-                self.add_token(if self.match_token('=') {
+                let matched = self.match_token('=');
+                self.add_token(if matched {
                     TokenType::GreaterEqual
                 } else {
                     TokenType::Greater
@@ -189,7 +193,7 @@ impl Scanner {
         self.add_token_with_literal(TokenType::String, value);
     }
 
-    fn match_token(&self, expected: char) -> bool {
+    fn match_token(&mut self, expected: char) -> bool {
         if self.is_at_end() {
             return false;
         }
@@ -197,6 +201,7 @@ impl Scanner {
         if self.source.chars().nth(self.current).unwrap() != expected {
             return false;
         }
+        self.current += 1;
         true
     }
 
