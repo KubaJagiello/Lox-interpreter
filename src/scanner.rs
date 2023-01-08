@@ -185,6 +185,7 @@ impl Scanner {
             self.error_reporter
                 .borrow_mut()
                 .error(self.line, "Unterminated string.".into());
+            return;
         }
 
         self.advance();
