@@ -229,7 +229,6 @@ impl Scanner {
     }
 
     fn advance(&mut self) -> char {
-        // TODO handle outOfBound
         let ret = self.source.chars().nth(self.current).unwrap();
         self.current += 1;
         ret
